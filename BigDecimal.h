@@ -16,20 +16,31 @@ public:
 
 	BigDecimal sub(BigDecimal *);
 
-	BigDecimal abs(BigDecimal *);
+	BigDecimal abs();
 
-	//BigDecimal mul(BigDecimal*);
-	//BigDecimal div(BigDecimal*);
+	BigDecimal mul(BigDecimal *);
+
+	BigDecimal mul(int);
+
 	bool greater(BigDecimal *);
-	//bool less(BigDecimal*);
-	//bool equals(BigDecimal*);
 
-	// TODO: move this to private
-	BigDecimal neg();
+	bool less(BigDecimal *);
+
+	bool equals(BigDecimal *);
+
 
 private:
+	BigDecimal();
 
 	BigDecimal(const BigDecimal &);
+
+	BigDecimal neg();
+
+	BigDecimal shl(int);
+
+	BigDecimal shr(int);
+
+	BigDecimal rmd(int *);
 
 	int strlen(const char *s) const {
 		int ret = -1;
