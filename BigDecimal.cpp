@@ -5,27 +5,28 @@
 
 BigDecimal::BigDecimal(char *num) : mantis(num) {
 
-	int mantis_len = strlen(mantis);
-	int num_len = mantis_len;
+	// initialize mantis length
+	m_len = strlen(mantis);
+	int num_len = m_len;
 
 	// if the first character is '-', the sign is negative
 	if (mantis[0] == '-') {
 		sign = -1;
-		mantis_len--;
+		m_len--;
 	} else {
 		sign = 1;
 	}
 
 	// check wether the decimal point exists
-	for (int i = 0; i < mantis_len; ++i) {
+	for (int i = 0; i < m_len; ++i) {
 		if (num[i + (1 - sign) / 2] == '.') {
-			mantis_len--;
+			m_len--;
 			break;
 		}
 	}
 
 	// create a new char[] to store the mantis
-	mantis = new char[mantis_len + 1];
+	mantis = new char[m_len + 1];
 
 	// an iterator for assignment
 	// TODO: refactor m_idx to m_it
@@ -92,8 +93,7 @@ std::ostream &operator<<(std::ostream &out, const BigDecimal &bigDecimal) {
 		while (texp) out << bigDecimal.numAt(--texp);
 
 		// check if there are nonzero digits after decimal point
-		int mantis_len = bigDecimal.strlen(bigDecimal.mantis);
-		int left = mantis_len - bigDecimal.exp;
+		int left = bigDecimal.m_len - bigDecimal.exp;
 
 		// print the decimal point if needed
 		if (left > 0) out << '.';
@@ -272,22 +272,21 @@ BigDecimal BigDecimal::sub(BigDecimal *b) {
 
 BigDecimal::BigDecimal(const BigDecimal &obj) {
 
-	int mantis_len = strlen(obj.mantis);
-
 	// tew mantis character array
-	mantis = new char[mantis_len + 1];
+	mantis = new char[obj.m_len + 1];
 
 	// copy all data from obj to the nem mantis
-	for (int i = 0; i < mantis_len; ++i) {
+	for (int i = 0; i < obj.m_len; ++i) {
 		mantis[i] = obj.mantis[i];
 	}
 
 	// set the last character to '\0'
-	mantis[mantis_len] = 0;
+	mantis[obj.m_len] = 0;
 
 	// copy the rest of the fields
 	exp = obj.exp;
 	sign = obj.sign;
+	m_len = obj.m_len;
 }
 
 BigDecimal BigDecimal::abs() {
@@ -351,8 +350,8 @@ bool BigDecimal::equals(BigDecimal *b) {
 	// helper pointer
 	BigDecimal *a = this;
 
-	// numbers can only be equal if their signs are equal
-	if (a->sign == b->sign) {
+	// numbers can only be equal if their signs and mantis lengths are equal
+	if (a->sign == b->sign && a->m_len == b->m_len) {
 
 		// find first and last digit to compare
 		int min = MIN(a->minIdx(), b->minIdx());
@@ -396,13 +395,10 @@ BigDecimal BigDecimal::shr(int n) {
 
 BigDecimal BigDecimal::rmd(int *n) {
 
-	// calculate number of places to move the decimal point
-	int mantis_len = strlen(mantis);
-
 	// temporary storing variable
 	BigDecimal ret(*this);
 
-	if (mantis_len < exp) {
+	if (m_len < exp) {
 
 		// if there are zeros between the mantis and decimal point don't do
 		// anything
@@ -413,10 +409,10 @@ BigDecimal BigDecimal::rmd(int *n) {
 
 		// if there are nonzero digits after decimal point move the decimal
 		// point to the end of the mantis
-		*n = mantis_len - this->exp;
+		*n = m_len - this->exp;
 
 		// set the exponent to the number of digits
-		ret.exp = mantis_len;
+		ret.exp = m_len;
 		return ret;
 	}
 }

@@ -113,8 +113,7 @@ private:
 	/**
 	 * @brief Helper function for calculating length of a string
 	 * @param s string to be checked
-	 * @return length of a string
-	 * TODO: make a field like mantis_len for faster evaluation
+	 * @return length of a strin
 	 */
 	int strlen(const char *s) const {
 		// find the index of '\0' character
@@ -127,12 +126,12 @@ private:
 	 * @brief Safely removes zeros from start and end
 	 */
 	void remove_zeros() {
-		/// Check if all zeros
-		int mantis_len = strlen(mantis);
+
+		// Check if all zeros
 		bool zero = true;
 
 		// loop and find first zero if exists
-		for (int i = 0; i < mantis_len; ++i) {
+		for (int i = 0; i < m_len; ++i) {
 			if (mantis[i] != '0') {
 				zero = false;
 				break;
@@ -147,24 +146,24 @@ private:
 			sign = 1;
 		} else {
 			// initial values
-			int rm_front = 0, rm_back = mantis_len - 1;
+			int rm_front = 0, rm_back = m_len - 1;
 
 			// find the first nonzero value from the left
-			for (; rm_front < mantis_len && mantis[rm_front] == '0'; ++rm_front)
+			for (; rm_front < m_len && mantis[rm_front] == '0'; ++rm_front)
 				exp--;
 
 			// find the first nonzero value from the right
 			for (; rm_back >= 0 && mantis[rm_back] == '0'; --rm_back);
 
 			// flip to store number of zeros from the back
-			rm_back = mantis_len - 1 - rm_back;
+			rm_back = m_len - 1 - rm_back;
 
 			// make a new mantis with less data
-			char *new_mantis = new char[mantis_len + 1 - rm_back - rm_front];
+			char *new_mantis = new char[m_len + 1 - rm_back - rm_front];
 			char *it = new_mantis;
 
 			// copy the mantis to new mantis
-			for (int i = rm_front; i < mantis_len - rm_back; ++i) {
+			for (int i = rm_front; i < m_len - rm_back; ++i) {
 				*it++ = mantis[i];
 			}
 			*it = 0;
@@ -205,6 +204,7 @@ private:
 
 	int sign; /* Sign of the big decimal. Can take values of -1 and 1. */
 	int exp; /* Exponent of the big decimal. */
+	int m_len; /* Length (in bytes) of the mantis */
 	char *mantis; /* Mantis of the big number */
 
 	/**
