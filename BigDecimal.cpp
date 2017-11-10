@@ -29,7 +29,6 @@ BigDecimal::BigDecimal(char *num) : mantis(num) {
 	mantis = new char[m_len + 1];
 
 	// an iterator for assignment
-	// TODO: refactor m_idx to m_it
 	char *m_idx = mantis;
 
 	// skip first character if it is '-'
@@ -63,7 +62,7 @@ BigDecimal::~BigDecimal() {
 	delete[] mantis;
 }
 
-BigDecimal::BigDecimal(int *whole, int *fraction) {
+BigDecimal::BigDecimal(int *, int *) {
 	// Not implemented because it is not needed
 }
 
@@ -142,7 +141,7 @@ BigDecimal BigDecimal::add(BigDecimal *b) {
 			int sum = a->numAt(idx) + b->numAt(idx) + carry;
 
 			// set a digit
-			ret[max - idx + 2] = '0' + (sum % 10);
+			ret[max - idx + 2] = (char)('0' + (sum % 10));
 
 			// calculate a new carry
 			carry = sum / 10;
@@ -158,7 +157,7 @@ BigDecimal BigDecimal::add(BigDecimal *b) {
 			int sum = a->numAt(idx) + b->numAt(idx) + carry;
 
 			// set a digit
-			ret[max - idx + 1] = '0' + (sum % 10);
+			ret[max - idx + 1] = (char)('0' + (sum % 10));
 
 			// calculate a new carry
 			carry = sum / 10;
@@ -231,7 +230,7 @@ BigDecimal BigDecimal::sub(BigDecimal *b) {
 			int sum = neg * a->numAt(idx) - neg * b->numAt(idx) + carry;
 
 			// set a digit
-			ret[max - idx + 2] = '0' + ((sum + 10) % 10);
+			ret[max - idx + 2] = (char)('0' + ((sum + 10) % 10));
 
 			// calculate a new carry
 			carry = sum < 0 ? -1 : 0;
@@ -248,7 +247,7 @@ BigDecimal BigDecimal::sub(BigDecimal *b) {
 			int sum = neg * a->numAt(idx) - neg * b->numAt(idx) + carry;
 
 			// set a digit
-			ret[max - idx + 1] = '0' + ((sum + 10) % 10);
+			ret[max - idx + 1] = (char)('0' + ((sum + 10) % 10));
 
 			// calculate a new carry
 			carry = sum < 0 ? -1 : 0;

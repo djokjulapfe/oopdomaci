@@ -100,11 +100,6 @@ public:
 private:
 
 	/**
-	 * @brief default constructor
-	 */
-	BigDecimal();
-
-	/**
 	 * @brief Calculates the negative of a number
 	 * @return -this
 	 */
@@ -184,7 +179,7 @@ private:
 		int char_idx = exp - idx - 1;
 
 		// check if memory index exceeds string indices
-		if (char_idx < 0 || char_idx >= strlen(mantis)) return 0;
+		if (char_idx < 0 || char_idx >= m_len) return 0;
 		else return mantis[char_idx] - '0';
 	}
 
@@ -199,7 +194,7 @@ private:
 	 * @return logical index of the last digit
 	 */
 	int minIdx() const {
-		return exp - strlen(mantis);
+		return exp - m_len;
 	}
 
 	int sign; /* Sign of the big decimal. Can take values of -1 and 1. */
