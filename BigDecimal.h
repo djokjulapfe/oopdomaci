@@ -3,51 +3,128 @@
 
 #include <iostream>
 
+/**
+ * @brief Class can store large decimal numbers.
+ */
+
 class BigDecimal {
 
 public:
-	BigDecimal(char *);
+	/**
+	 * @brief Main constructor class
+	 * @param num a string containing a decimal number
+	 */
+	BigDecimal(char *num);
 
-	BigDecimal(int *, int *);
+	/**
+	 * @brief Helper constructor for easy assignment
+	 * @param whole array of numbers before the decimal point
+	 * @param fraction array of numbers before the decimal point
+	 */
+	BigDecimal(int *whole, int *fraction);
 
+	/**
+	 * @brief Standard destructor that deletes the internal char array
+	 */
 	~BigDecimal();
 
-	BigDecimal add(BigDecimal *);
+	/**
+	 * @brief Adds two numbers
+	 * @param b number to be added
+	 * @return the sum of b and this
+	 */
+	BigDecimal add(BigDecimal *b);
 
-	BigDecimal sub(BigDecimal *);
+	/**
+	 * @brief Subtracts two numbers
+	 * @param b number to be subtracted
+	 * @return the difference this - b
+	 */
+	BigDecimal sub(BigDecimal *b);
 
+	/**
+	 * @brief Calculates the absolute value of a number
+	 * @return the absolute number
+	 */
 	BigDecimal abs();
 
-	BigDecimal mul(BigDecimal *);
+	/**
+	 * @brief Checks if this > b
+	 * @param b number to be checked against
+	 * @return true iff this > b
+	 */
+	bool greater(BigDecimal *b);
 
-	BigDecimal mul(int);
+	/**
+	 * @brief Checks if this < b
+	 * @param b number to be checked agaianst
+	 * @return true iff this < b
+	 */
+	bool less(BigDecimal *b);
 
-	bool greater(BigDecimal *);
+	/**
+	 * @brief Checks if two numbers are equal
+	 * @param b number to be checked against
+	 * @return true iff this == b
+	 */
+	bool equals(BigDecimal *b);
 
-	bool less(BigDecimal *);
+	/**
+	 * @brief Shifts the number left n times
+	 * @param n number of times to be shifted left
+	 * @return the number shifted n times to the left
+	 */
+	BigDecimal shl(int n);
 
-	bool equals(BigDecimal *);
+	/**
+	 * @brief Shifts the number right n times
+	 * @param n number of times to be shifted right
+	 * @return the number shifted n times to the right
+	 */
+	BigDecimal shr(int n);
+
+	/**
+	 * @brief Shifts the number so that the decimal point gets erased
+	 * @param n the number of times the number is shifted
+	 * @return the number without the decimal point
+	 */
+	BigDecimal rmd(int *n);
+
+	/**
+	 * @brief Copy constructor that safely copies a BigDecimal
+	 * @param bigDecimal the number to be copied
+	 */
+	BigDecimal(const BigDecimal &bigDecimal);
 
 
 private:
+
+	/**
+	 * @brief default constructor
+	 */
 	BigDecimal();
 
-	BigDecimal(const BigDecimal &);
-
+	/**
+	 * @brief Calculates the negative of a number
+	 * @return -this
+	 */
 	BigDecimal neg();
 
-	BigDecimal shl(int);
-
-	BigDecimal shr(int);
-
-	BigDecimal rmd(int *);
-
+	/**
+	 * @brief Helper function for calculating length of a string
+	 * @param s string to be checked
+	 * @return length of a string
+	 * TODO: make a field like mantis_len for faster evaluation
+	 */
 	int strlen(const char *s) const {
 		int ret = -1;
 		while (s[++ret] != 0);
 		return ret;
 	}
 
+	/**
+	 * @brief Safely removes zeros from start and end
+	 */
 	void remove_zeros() {
 		// check if all zeros:
 		int mantis_len = strlen(mantis);
@@ -80,16 +157,27 @@ private:
 		}
 	}
 
+	/**
+	 * @brief Helper function for transforming logical indeces to memory
+	 * @param idx logical index
+	 * @return number at logical index
+	 */
 	int numAt(int idx) const {
 		int char_idx = exp - idx - 1;
 		if (char_idx < 0 || char_idx >= strlen(mantis)) return 0;
 		else return mantis[char_idx] - '0';
 	}
 
+	/**
+	 * @return logical index of the first digit
+	 */
 	int maxIdx() const {
 		return exp - 1;
 	}
 
+	/**
+	 * @return logical index of the last digit
+	 */
 	int minIdx() const {
 		return exp - strlen(mantis);
 	}
@@ -98,6 +186,10 @@ private:
 	int exp;
 	char *mantis;
 
+	/**
+	 * @brief function for std::ostream operator<< overloading
+	 * @return std::ostream that can print a BigDecimal
+	 */
 	friend std::ostream &operator<<(std::ostream &, const BigDecimal &);
 };
 
