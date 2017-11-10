@@ -117,6 +117,7 @@ private:
 	 * TODO: make a field like mantis_len for faster evaluation
 	 */
 	int strlen(const char *s) const {
+		// find the index of '\0' character
 		int ret = -1;
 		while (s[++ret] != 0);
 		return ret;
@@ -126,9 +127,11 @@ private:
 	 * @brief Safely removes zeros from start and end
 	 */
 	void remove_zeros() {
-		// check if all zeros:
+		/// Check if all zeros
 		int mantis_len = strlen(mantis);
 		bool zero = true;
+
+		// loop and find first zero if exists
 		for (int i = 0; i < mantis_len; ++i) {
 			if (mantis[i] != '0') {
 				zero = false;
@@ -136,34 +139,52 @@ private:
 			}
 		}
 		if (zero) {
+			// initialize to zero
 			delete mantis;
 			mantis = new char[1];
 			*mantis = '0';
 			exp = 0;
 			sign = 1;
 		} else {
+			// initial values
 			int rm_front = 0, rm_back = mantis_len - 1;
-			for (; rm_front < mantis_len && mantis[rm_front] == '0'; ++rm_front) exp--;
+
+			// find the first nonzero value from the left
+			for (; rm_front < mantis_len && mantis[rm_front] == '0'; ++rm_front)
+				exp--;
+
+			// find the first nonzero value from the right
 			for (; rm_back >= 0 && mantis[rm_back] == '0'; --rm_back);
+
+			// flip to store number of zeros from the back
 			rm_back = mantis_len - 1 - rm_back;
+
+			// make a new mantis with less data
 			char *new_mantis = new char[mantis_len + 1 - rm_back - rm_front];
 			char *it = new_mantis;
+
+			// copy the mantis to new mantis
 			for (int i = rm_front; i < mantis_len - rm_back; ++i) {
 				*it++ = mantis[i];
 			}
 			*it = 0;
+
+			// change the mantis
 			delete mantis;
 			mantis = new_mantis;
 		}
 	}
 
 	/**
-	 * @brief Helper function for transforming logical indeces to memory
+	 * @brief Helper function for transforming logical indices to memory
 	 * @param idx logical index
 	 * @return number at logical index
 	 */
 	int numAt(int idx) const {
+		// convert logical index to memory index
 		int char_idx = exp - idx - 1;
+
+		// check if memory index exceeds string indices
 		if (char_idx < 0 || char_idx >= strlen(mantis)) return 0;
 		else return mantis[char_idx] - '0';
 	}
@@ -182,9 +203,9 @@ private:
 		return exp - strlen(mantis);
 	}
 
-	int sign;
-	int exp;
-	char *mantis;
+	int sign; /* Sign of the big decimal. Can take values of -1 and 1. */
+	int exp; /* Exponent of the big decimal. */
+	char *mantis; /* Mantis of the big number */
 
 	/**
 	 * @brief function for std::ostream operator<< overloading

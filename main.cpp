@@ -49,6 +49,7 @@ void test() {
 	std::cout << b << " - " << a << " = " << b.sub(&a) << std::endl;
 	std::cout << a << " + " << b << " = " << a.add(&b) << std::endl;
 	std::cout << b << " + " << a << " = " << b.add(&a) << std::endl;
+	std::cout << b << " + " << d << " = " << b.add(&d) << std::endl;
 	std::cout << b << " > " << a << " = " << b.greater(&a) << std::endl;
 	std::cout << b << " < " << a << " = " << b.less(&a) << std::endl;
 	std::cout << b << " = " << a << " = " << b.equals(&a) << std::endl;
@@ -57,6 +58,9 @@ void test() {
 	std::cout << b << " = " << c << " = " << b.equals(&c) << std::endl;
 	std::cout << "|" << a << "| = " << a.abs() << std::endl;
 	std::cout << "|" << d << "| = " << d.abs() << std::endl;
+	int n;
+	std::cout << a << ".rmd(n) = " << a.rmd(&n);
+	std::cout << ", n = " << n << std::endl;
 	//std::cout << a << " * " << b << " = " << a.mul(&b) << std::endl;
 	//res = 75.39175
 	//std::cout << a << " * " << d << " = " << a.mul(&d) << std::endl;
